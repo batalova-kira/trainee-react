@@ -4,6 +4,7 @@ import css from './App.module.css';
 import { Component } from 'react';
 import ProductForm from './ProductForm/ProductForm';
 import { nanoid } from 'nanoid';
+import Modal from './Modal/Modal';
 
 const productsData = [
   {
@@ -22,7 +23,24 @@ export class App extends Component {
   state = {
     // counterValue: 0,
     products: productsData,
+    isOpenModal: false, //відкрита модалка чи закрита
+    modalData: null, // данні,які модалка повинна відобразити
   };
+
+  componentDidMount() {
+    //дістаємо дані з локалсторідж
+    const stringifiedProducts = localStorage.getItem('products');
+    const parsedProducts = JSON.parse(stringifiedProducts) ?? productsData;
+    // оновлюэмо стейт
+    this.setState({ products: parsedProducts });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.products !== this.state.products) {
+      const stringifiedProducts = JSON.stringify(this.state.products);
+      localStorage.setItem('products', stringifiedProducts);
+    }
+  }
 
   // handleIncrement = () => {
   //   // this.setState(pS => {
@@ -42,13 +60,26 @@ export class App extends Component {
   //   this.setState({ counterValue: this.state.counterValue - 1 });
   // };
 
+  //відкриваємо модальне вікно
+  openModal = someDataToModal => {
+    this.setState({ isOpenModal: true, modalData: someDataToModal });
+  };
+
+  // закриваємо модальне вікно
+  closeModal = () => {
+    this.setState({ isOpenModal: false, modalData: null });
+  };
+
+  //видаляємо продукт
   handleDeleteProduct = productId => {
     this.setState({
       products: this.state.products.filter(product => product.id !== productId),
     });
   };
 
+  //сюди передаємо об'єкт з форми для реалізації його додавання
   handleAddProduct = productData => {
+    // перевіряємо, чи немає дублікату
     const hasDuplicate = this.state.products.some(
       product => product.title === productData.title
     );
@@ -57,12 +88,14 @@ export class App extends Component {
       return;
     }
 
-    const finalProduct = { ...productData, id: nanoid() };
+    //створили фінальний продукт, додали ід
+    const finalProduct = { ...productData, id: nanoid() }; //Object.assign({id: nanoid()}, productData)
 
     // this.setState({
     //   products: [...this.state.products, finalProduct],
     // });
 
+    // передаємо об'єкт в стейт
     this.setState(prevState => ({
       products: [...prevState.products, finalProduct],
     }));
@@ -97,11 +130,18 @@ export class App extends Component {
                   price={product.price}
                   discount={product.discount}
                   handleDeleteProduct={this.handleDeleteProduct}
+                  openModal={this.openModal}
                 />
               );
             })}
           </div>
         </Section>
+        {this.state.isOpenModal && (
+          <Modal
+            closeModal={this.closeModal}
+            modalData={this.state.modalData}
+          />
+        )}
       </div>
     );
   }

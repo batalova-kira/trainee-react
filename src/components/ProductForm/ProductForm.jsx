@@ -23,6 +23,13 @@ export default class ProductForm extends Component {
 
     //транспортуємо продукт в Арр
     this.props.handleAddProduct(productData);
+    //очищення форми, змінюємо стан на початковий
+    this.setState({
+      title: '',
+      price: '',
+      hasDiscount: false,
+      discount: '',
+    });
   };
 
   handleInputChange = event => {
@@ -41,6 +48,9 @@ export default class ProductForm extends Component {
   render() {
     return (
       <form className={css.form} onSubmit={this.handleSubmit}>
+        {this.state.title === 'Sweet' && (
+          <h2>Congraits! You won a promocode for -20% - 564ENGF 🥳</h2>
+        )}
         <label className={css.formLabel}>
           <p className={css.labelText}>Title:</p>
           <input
@@ -68,15 +78,17 @@ export default class ProductForm extends Component {
             checked={this.state.hasDiscount}
           />
         </label>
-        <label className={css.formLabel}>
-          <p className={css.labelText}>Discount:</p>
-          <input
-            type="text"
-            name="discount"
-            onChange={this.handleInputChange}
-            value={this.state.discount}
-          />
-        </label>
+        {this.state.hasDiscount && (
+          <label className={css.formLabel}>
+            <p className={css.labelText}>Discount:</p>
+            <input
+              type="text"
+              name="discount"
+              onChange={this.handleInputChange}
+              value={this.state.discount}
+            />
+          </label>
+        )}
         <button type="submit">Add product</button>
       </form>
     );
