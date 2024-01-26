@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import css from './AppWithRequest.module.css';
+import { StyledAppWithRequests } from './AppWithRequest.styled';
+import { Loader } from './Loader/Loader';
+
 // rcc - react class component
 //rafce - react arrow functions expression component
 
@@ -20,10 +22,17 @@ export default class AppWithRequest extends Component {
 
   // функція (метод) для нашого мережевого запиту
   fetchPosts = async () => {
-    const { data } = await axios.get(
-      'https://jsonplaceholder.typicode.com/posts'
-    );
-    this.setState({ posts: data });
+    try {
+      this.setState({ isLoading: true });
+      const { data } = await axios.get(
+        'https://jsonplaceholder.typicode.com/posts'
+      );
+      this.setState({ posts: data });
+    } catch (error) {
+      this.setState({ error: error.message });
+    } finally {
+      this.setState({ isLoading: false });
+    }
   };
 
   // виклик функції (методу) для нашого мережевого запиту під час першого рендеру цього компоненту
@@ -33,15 +42,21 @@ export default class AppWithRequest extends Component {
 
   render() {
     return (
-      <div className={css.container}>
+      <StyledAppWithRequests>
         <h1>HTTP Requests</h1>
-        <ul className={css.postList}>
+        {this.state.error !== null && (
+          <p className="error-bage">
+            Ooops, some error occured..Error message: {this.state.error}
+          </p>
+        )}
+        {this.state.isLoading && <Loader />}
+        <ul className="postList">
           {this.state.posts !== null &&
             this.state.posts.map(post => {
               return (
-                <li key={post.id} className={css.postListItem}>
-                  <h2 className={css.itemTitle}>{post.title}</h2>
-                  <p className={css.itemBody}>
+                <li key={post.id} className="postListItem">
+                  <h2 className="itemTitle">{post.title}</h2>
+                  <p className="itemBody">
                     <b>Body</b>
                     {post.body}
                   </p>
@@ -49,7 +64,7 @@ export default class AppWithRequest extends Component {
               );
             })}
         </ul>
-      </div>
+      </StyledAppWithRequests>
     );
   }
 }
