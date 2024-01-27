@@ -34,4 +34,34 @@ export const StyledAppWithRequests = styled.div`
     margin-bottom: 20px;
     font-size: 20px;
   }
+
+  .listWrapper {
+    display: flex;
+    gap: 20px;
+  }
+
+  .commentsList {
+    list-style: none;
+    padding: 0;
+  }
+
+  .commentsListItem {
+    padding: 20px;
+    border: 2px solid green;
+    margin-bottom: 25px;
+  }
+
+  .commentTitle {
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+
+  .commentEmail {
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+
+  .commentBody {
+    margin: 0;
+  }
 `;

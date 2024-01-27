@@ -13,6 +13,14 @@ import { Loader } from './Loader/Loader';
 // "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
 // },
 
+// {
+// "postId": 1,
+// "id": 2,
+// "name": "quo vero reiciendis velit similique earum",
+// "email": "Jayne_Kuhic@sydney.com",
+// "body": "est natus enim nihil est dolore omnis voluptatem numquam\net omnis occaecati quod ullam at\nvoluptatem error expedita pariatur\nnihil sint nostrum voluptatem reiciendis et"
+// },
+
 export default class AppWithRequest extends Component {
   state = {
     posts: null,
@@ -50,20 +58,36 @@ export default class AppWithRequest extends Component {
           </p>
         )}
         {this.state.isLoading && <Loader />}
-        <ul className="postList">
-          {this.state.posts !== null &&
-            this.state.posts.map(post => {
-              return (
-                <li key={post.id} className="postListItem">
-                  <h2 className="itemTitle">{post.title}</h2>
-                  <p className="itemBody">
-                    <b>Body</b>
-                    {post.body}
-                  </p>
-                </li>
-              );
-            })}
-        </ul>
+        <div className="listWrapper">
+          <ul className="postList">
+            {this.state.posts !== null &&
+              this.state.posts.map(post => {
+                return (
+                  <li key={post.id} className="postListItem">
+                    <h2 className="itemTitle">{post.title}</h2>
+                    <p className="itemBody">
+                      <b>Body</b>
+                      {post.body}
+                    </p>
+                  </li>
+                );
+              })}
+          </ul>
+          <ul className="commentsList">
+            <li key={4564} className="commentsListItem">
+              <h2 className="commentTitle">
+                quo vero reiciendis velit similique earum
+              </h2>
+              <h3 className="commentEmail">Jayne_Kuhic@sydney.com</h3>
+              <p className="commentBody">
+                <b>Body </b>
+                est natus enim nihil est dolore omnis voluptatem numquam\net
+                omnis occaecati quod ullam at\nvoluptatem error expedita
+                pariatur\nnihil sint nostrum voluptatem reiciendis et
+              </p>
+            </li>
+          </ul>
+        </div>
       </StyledAppWithRequests>
     );
   }
