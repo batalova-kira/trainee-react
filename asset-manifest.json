@@ -1,10 +1,13 @@
 {
   "files": {
-    "main.js": "/trainee-react/static/js/main.1e87331e.js",
+    "main.css": "/trainee-react/static/css/main.6a47a140.css",
+    "main.js": "/trainee-react/static/js/main.cd0cef91.js",
     "index.html": "/trainee-react/index.html",
-    "main.1e87331e.js.map": "/trainee-react/static/js/main.1e87331e.js.map"
+    "main.6a47a140.css.map": "/trainee-react/static/css/main.6a47a140.css.map",
+    "main.cd0cef91.js.map": "/trainee-react/static/js/main.cd0cef91.js.map"
   },
   "entrypoints": [
-    "static/js/main.1e87331e.js"
+    "static/css/main.6a47a140.css",
+    "static/js/main.cd0cef91.js"
   ]
 }
