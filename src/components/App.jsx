@@ -1,10 +1,10 @@
 import { Product } from './Product/Product';
 import Section from './Section/Section';
 import css from './App.module.css';
-import { Component } from 'react';
 import ProductForm from './ProductForm/ProductForm';
 import { nanoid } from 'nanoid';
 import Modal from './Modal/Modal';
+import { useEffect, useState } from 'react';
 
 const productsData = [
   {
@@ -19,28 +19,43 @@ const productsData = [
   { id: '5', title: 'Chup', price: '5.90', discount: '1.5' },
 ];
 
-export class App extends Component {
-  state = {
-    // counterValue: 0,
-    products: productsData,
-    isOpenModal: false, //відкрита модалка чи закрита
-    modalData: null, // данні,які модалка повинна відобразити
-  };
-
-  componentDidMount() {
+export const App = () => {
+  const [products, setProducts] = useState(() => {
     //дістаємо дані з локалсторідж
     const stringifiedProducts = localStorage.getItem('products');
     const parsedProducts = JSON.parse(stringifiedProducts) ?? productsData;
-    // оновлюэмо стейт
-    this.setState({ products: parsedProducts });
-  }
+    // оновлюємо стейт
+    return parsedProducts;
+  });
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [modalData, setModalData] = useState(null);
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.products !== this.state.products) {
-      const stringifiedProducts = JSON.stringify(this.state.products);
-      localStorage.setItem('products', stringifiedProducts);
-    }
-  }
+  // state = {  // коли Арр написан на класі
+  //   // counterValue: 0,
+  //   products: productsData,
+  //   isOpenModal: false, //відкрита модалка чи закрита
+  //   modalData: null, // данні,які модалка повинна відобразити
+  // };
+
+  // componentDidMount() {
+  //   //дістаємо дані з локалсторідж
+  //   const stringifiedProducts = localStorage.getItem('products');
+  //   const parsedProducts = JSON.parse(stringifiedProducts) ?? productsData;
+  //   // оновлюємо стейт
+  //   this.setState({ products: parsedProducts });
+  // }
+
+  useEffect(() => {
+    const stringifiedProducts = JSON.stringify(products);
+    localStorage.setItem('products', stringifiedProducts);
+  }, [products]);
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.products !== this.state.products) {
+  //     const stringifiedProducts = JSON.stringify(this.state.products);
+  //     localStorage.setItem('products', stringifiedProducts);
+  //   }
+  // }
 
   // handleIncrement = () => {
   //   // this.setState(pS => {
@@ -61,26 +76,31 @@ export class App extends Component {
   // };
 
   //відкриваємо модальне вікно
-  openModal = someDataToModal => {
-    this.setState({ isOpenModal: true, modalData: someDataToModal });
+  const openModal = someDataToModal => {
+    setIsOpenModal(true);
+    setModalData(someDataToModal);
+    // this.setState({ isOpenModal: true, modalData: someDataToModal });
   };
 
   // закриваємо модальне вікно
-  closeModal = () => {
-    this.setState({ isOpenModal: false, modalData: null });
+  const closeModal = () => {
+    setIsOpenModal(false);
+    setModalData(null);
+    // this.setState({ isOpenModal: false, modalData: null });
   };
 
   //видаляємо продукт
-  handleDeleteProduct = productId => {
-    this.setState({
-      products: this.state.products.filter(product => product.id !== productId),
-    });
+  const handleDeleteProduct = productId => {
+    setProducts(products.filter(product => product.id !== productId));
+    // this.setState({
+    //   products: this.state.products.filter(product => product.id !== productId),
+    // });
   };
 
   //сюди передаємо об'єкт з форми для реалізації його додавання
-  handleAddProduct = productData => {
+  const handleAddProduct = productData => {
     // перевіряємо, чи немає дублікату
-    const hasDuplicate = this.state.products.some(
+    const hasDuplicate = products.some(
       product => product.title === productData.title
     );
     if (hasDuplicate) {
@@ -96,53 +116,46 @@ export class App extends Component {
     // });
 
     // передаємо об'єкт в стейт
-    this.setState(prevState => ({
-      products: [...prevState.products, finalProduct],
-    }));
+    setProducts([...products, finalProduct]);
+    // setProducts(prevState => [...prevState, finalProduct])
+    // this.setState(prevState => ({
+    //   products: [...prevState.products, finalProduct],
+    // }));
   };
 
-  render() {
-    const sortedProducts = [...this.state.products].sort(
-      (a, b) => b.discount - a.discount
-    );
-    return (
-      <div>
-        <Section>
-          <h3>It`s mee😍</h3>
-          {/* <button onClick={this.handleDecrement}>Decrement</button>
+  const sortedProducts = [...products].sort((a, b) => b.discount - a.discount);
+  return (
+    <div>
+      <Section>
+        <h3>It`s mee😍</h3>
+        {/* <button onClick={this.handleDecrement}>Decrement</button>
           <b>Counter value:{this.state.counterValue}</b>
           <button onClick={this.handleIncrement}>Increment</button>
           {this.state.counterValue > 4 && (
             <div>Congratulation! You won discount 20% - #F5D6S0E43🥳</div>
           )} */}
-        </Section>
-        <Section title="Add Product Form">
-          <ProductForm handleAddProduct={this.handleAddProduct} />
-        </Section>
-        <Section title="Product List">
-          <div className={css.productList}>
-            {sortedProducts.map(product => {
-              return (
-                <Product
-                  key={product.id}
-                  id={product.id}
-                  title={product.title}
-                  price={product.price}
-                  discount={product.discount}
-                  handleDeleteProduct={this.handleDeleteProduct}
-                  openModal={this.openModal}
-                />
-              );
-            })}
-          </div>
-        </Section>
-        {this.state.isOpenModal && (
-          <Modal
-            closeModal={this.closeModal}
-            modalData={this.state.modalData}
-          />
-        )}
-      </div>
-    );
-  }
-}
+      </Section>
+      <Section title="Add Product Form">
+        <ProductForm handleAddProduct={handleAddProduct} />
+      </Section>
+      <Section title="Product List">
+        <div className={css.productList}>
+          {sortedProducts.map(product => {
+            return (
+              <Product
+                key={product.id}
+                id={product.id}
+                title={product.title}
+                price={product.price}
+                discount={product.discount}
+                handleDeleteProduct={handleDeleteProduct}
+                openModal={openModal}
+              />
+            );
+          })}
+        </div>
+      </Section>
+      {isOpenModal && <Modal closeModal={closeModal} modalData={modalData} />}
+    </div>
+  );
+};

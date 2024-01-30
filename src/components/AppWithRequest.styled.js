@@ -16,7 +16,9 @@ export const StyledAppWithRequests = styled.div`
     padding: 20px;
     border: 2px solid black;
     margin-bottom: 25px;
+    cursor: pointer;
   }
+
   .itemTitle {
     margin-top: 0;
     margin-bottom: 15px;
@@ -43,6 +45,10 @@ export const StyledAppWithRequests = styled.div`
   .commentsList {
     list-style: none;
     padding: 0;
+    position: sticky;
+    top: 15px;
+    max-height: 100vh;
+    overflow: overlay;
   }
 
   .commentsListItem {

@@ -24,11 +24,14 @@ import { Loader } from './Loader/Loader';
 export default class AppWithRequest extends Component {
   state = {
     posts: null,
+    selectedPostId: null,
+    comments: null,
+
     isLoading: false,
     error: null,
   };
 
-  // функція (метод) для нашого мережевого запиту
+  // функція (метод) для нашого мережевого запиту постів
   fetchPosts = async () => {
     try {
       this.setState({ isLoading: true });
@@ -43,11 +46,36 @@ export default class AppWithRequest extends Component {
     }
   };
 
+  // функція (метод) для мережевого запиту коментарів до постів
+  fetchPostsComments = async () => {
+    try {
+      this.setState({ isLoading: true });
+      const { data } = await axios.get(
+        `https://jsonplaceholder.typicode.com/comments?postId=${this.state.selectedPostId}`
+      );
+      this.setState({ comments: data });
+    } catch (error) {
+      this.setState({ error: error.message });
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  };
+
+  //функція, яка при натисканні на пост зберігає в стейті ід поста
+
+  onSelectPost = id => {
+    this.setState({ selectedPostId: id });
+  };
   // виклик функції (методу) для нашого мережевого запиту під час першого рендеру цього компоненту
   componentDidMount() {
     this.fetchPosts();
   }
 
+  componentDidUpdate(_, prevState) {
+    if (prevState.selectedPostId !== this.state.selectedPostId) {
+      this.fetchPostsComments();
+    }
+  }
   render() {
     return (
       <StyledAppWithRequests>
@@ -63,7 +91,11 @@ export default class AppWithRequest extends Component {
             {this.state.posts !== null &&
               this.state.posts.map(post => {
                 return (
-                  <li key={post.id} className="postListItem">
+                  <li
+                    key={post.id}
+                    className="postListItem"
+                    onClick={() => this.onSelectPost(post.id)}
+                  >
                     <h2 className="itemTitle">{post.title}</h2>
                     <p className="itemBody">
                       <b>Body</b>
@@ -74,18 +106,23 @@ export default class AppWithRequest extends Component {
               })}
           </ul>
           <ul className="commentsList">
-            <li key={4564} className="commentsListItem">
-              <h2 className="commentTitle">
-                quo vero reiciendis velit similique earum
-              </h2>
-              <h3 className="commentEmail">Jayne_Kuhic@sydney.com</h3>
-              <p className="commentBody">
-                <b>Body </b>
-                est natus enim nihil est dolore omnis voluptatem numquam\net
-                omnis occaecati quod ullam at\nvoluptatem error expedita
-                pariatur\nnihil sint nostrum voluptatem reiciendis et
-              </p>
+            <li className="commentsListItem">
+              Selected post Id: {this.state.selectedPostId}
             </li>
+            {!this.state.isLoading &&
+              this.state.comments !== null &&
+              this.state.comments.map(comment => {
+                return (
+                  <li key={comment.id} className="commentsListItem">
+                    <h2 className="commentTitle">{comment.name}</h2>
+                    <h3 className="commentEmail">{comment.email}</h3>
+                    <p className="commentBody">
+                      <b>Body </b>
+                      {comment.body}
+                    </p>
+                  </li>
+                );
+              })}
           </ul>
         </div>
       </StyledAppWithRequests>
