@@ -2,7 +2,8 @@ import HomePage from 'pages/HomePage';
 import PostDetails from 'pages/PostDetails';
 import PostsPage from 'pages/PostsPage';
 import { Products } from 'pages/ProductsPage';
-import { NavLink, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
+import Layout from './Layout/Layout';
 
 /*
 Етапи роботи з маршрутізацією
@@ -20,26 +21,13 @@ import { NavLink, Route, Routes } from 'react-router-dom';
 */
 export const App = () => {
   return (
-    <div>
-      <header>
-        <NavLink className="header-link" to="/">
-          Home
-        </NavLink>
-        <NavLink className="header-link" to="/posts">
-          Posts
-        </NavLink>
-        <NavLink className="header-link" to="/products">
-          Products
-        </NavLink>
-      </header>
-      <main>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/posts" element={<PostsPage />} />
-          <Route path="/posts/:postId" element={<PostDetails />} />
-          <Route path="/products" element={<Products />} />
-        </Routes>
-      </main>
-    </div>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/posts" element={<PostsPage />} />
+        <Route path="/posts/:postId/*" element={<PostDetails />} />
+        <Route path="/products" element={<Products />} />
+      </Routes>
+    </Layout>
   );
 };

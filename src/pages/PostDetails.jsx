@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { Loader } from 'components/Loader/Loader';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { NavLink, Route, Routes, useParams } from 'react-router-dom';
+import PostComments from './PostComments';
 
 const PostDetails = () => {
   const { postId } = useParams();
@@ -38,6 +39,14 @@ const PostDetails = () => {
           <code>{postDetails.body}</code>
         </div>
       )}
+      <div>
+        <NavLink className="header-link" to="comments">
+          Comments
+        </NavLink>
+        <Routes>
+          <Route path="comments" element={<PostComments />} />
+        </Routes>
+      </div>
     </div>
   );
 };
