@@ -36,3 +36,21 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+.header-link{
+text-decoration: none;
+color: #000;
+font-style: 20px;
+padding: 20px;
+margin-right: 25px;
+display: inline-flex;
+border: 1px solid black;
+border-radius: 10px;
+transition: all .3s;
+}
+
+.header-link.active {
+  background-color: #000;
+  color: #fff;
+
+}
