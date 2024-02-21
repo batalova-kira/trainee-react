@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useRef } from 'react';
 import {
   Link,
   NavLink,
@@ -7,9 +7,10 @@ import {
   useLocation,
   useParams,
 } from 'react-router-dom';
-import axios from 'axios';
 
 import Loader from 'components/Loader/Loader';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPostDetails } from './../redux/postDetails/postDetails.reducer';
 
 const PostsComments = lazy(() => import('pages/PostsComments'));
 
@@ -21,29 +22,15 @@ const PostDetails = () => {
   const { postId } = useParams();
   const location = useLocation();
   const backLinkRef = useRef(location.state?.from ?? '/');
-  // postId -> '0deqwe';
-  // postId -> 'dwa2123dwa241';
-  const [postDetails, setPostDetails] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+
+  const postDetails = useSelector(state => state.magazine.postDetails);
+  const isLoading = useSelector(state => state.magazine.isLoading);
+  const error = useSelector(state => state.magazine.error);
 
   useEffect(() => {
-    const fetchPostDetails = async () => {
-      try {
-        setIsLoading(true);
-        const { data } = await axios.get(
-          `https://jsonplaceholder.typicode.com/posts/${postId}`
-        );
-        setPostDetails(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPostDetails();
-  }, [postId]);
+    dispatch(fetchPostDetails(postId));
+  }, [postId, dispatch]);
 
   return (
     <div>
