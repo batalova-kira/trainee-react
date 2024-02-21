@@ -1,15 +1,13 @@
+import { useDispatch } from 'react-redux';
+import { openModal } from './../../redux/modal/modal.reducer';
+
+import { ReactComponent as IconTrash } from 'assets/icons/trashSvg.svg';
 import css from './Product.module.css';
+const Product = ({ id, title, price, discount, handleDeleteProduct }) => {
+  // const { dayOfTheMonth, openModal } = useContext(ModalContext);
+  const dispatch = useDispatch();
 
-export const Product = ({
-  title,
-  id,
-  price,
-  discount,
-  handleDeleteProduct,
-  openModal,
-}) => {
   const productBg = discount ? '#97e605' : '#f9bf04';
-
   const productStyles = {
     backgroundColor: productBg,
   };
@@ -17,33 +15,38 @@ export const Product = ({
   return (
     <div className={css.product} style={productStyles}>
       <img
-        src="https://images.pexels.com/photos/1906435/pexels-photo-1906435.jpeg"
-        alt="Candies"
+        src="https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?dpr=2&h=480&w=640"
+        alt="Tacos With Lime"
         width="640"
-        className={css.productImg}
+        className={css.productImg} // "Product_productImg__HjAFi"
       />
-      <h2>{title}</h2>
+      <h2>{title} </h2>
       {discount ? (
-        <h3 className={css.discountBage}>Discount : {discount} $ </h3>
+        <h3 className={css.discountBage}>Discount: {discount}$</h3>
       ) : (
-        <p className={css.apology}>Sorry, we don`t have this product</p>
+        <p className={css.apology}>
+          Sorry, but discount on this type of product has expired!
+        </p>
       )}
-      <h3>Price: {price} $</h3>
-      <button className={css.productAddToCardBtn} type="button">
-        Add to card
+      <p>Price: {price}$</p>
+      <button className={css.productAddToCartBtn} type="button">
+        Add to cart
       </button>
       <button
-        onClick={() => openModal({ title, price, discount })}
-        className={css.productAddToCardBtn}
+        onClick={() => dispatch(openModal({ title, price, discount }))}
+        className={css.productAddToCartBtn}
+        type="button"
       >
         See the details
       </button>
       <button
         onClick={() => handleDeleteProduct(id)}
-        className={css.productAddToCardBtn}
+        className={css.productAddToCartBtn}
+        type="button"
       >
-        &times;
+        <IconTrash />
       </button>
     </div>
   );
 };
+export default Product;

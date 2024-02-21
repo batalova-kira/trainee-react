@@ -1,9 +1,10 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-const PostComments = () => {
+const PostsComments = () => {
   const { postId } = useParams();
-  return <div>PostComments: {postId}</div>;
+
+  return <div>PostsComments: {postId}</div>;
 };
 
-export default PostComments;
+export default PostsComments;

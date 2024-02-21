@@ -1,103 +1,82 @@
 import React, { useEffect, useState } from 'react';
+
 import { StyledModal } from './Styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { closeModal } from './../../redux/modal/modal.reducer';
+
 /*
- Методи життєвого циклу - це зарезервовані реактом  методи (функції),
- які запускаються в певний період життя компоненти. 
+Методи життєвого циклу - це зарезервовані реактом методи(функції),
+ які запускаються в певний період життя компоненти самим Реактом.
 
- componentDidMount(){} - метод життєвого циклу,
- що запускається один раз, після успішного монтування компоненти в DOM.
+ componentDidMount() {} - метод життєвого цикл,
+    що запускається один раз, після успішного монтування компонети в DOM.
 
- Використання:
- - Вішаються глобальні слухачі подій (addEventListener)
- - Встановлюються асінхронні таймери та лічільники (setTimeout, setInterval)
- - Зчитуються данні з локального сховища
- - Надсилаються мережеві запити (HTTP request)
+    Використання:
+    - Вішаються глобальні слухачі подій (addEventListener)
+    - Встановлюються асинхронні таймери та лічильники (setTimeout, setInterval)
+    - Зчитуються дані з локального сховища та встановлюємо їх в стейт
+    - Надсилаються мережеві запити (HTTP request)
 
- componentWillUnmount(){} - метод життєвого циклу,
-що запускається один раз перед повним видаленням компоненти з DOM.
+ componentWillUnmount() {} - метод життєвого цикл,
+    що запускається один раз, перед повним видаленням компонети з DOM.
 
-Використання:
- - Прибираються глобальні слухачі подій (removeEventListener)
- - Прибираються асінхронні таймери та лічільники (clearTimeout, clearInterval)
- - Зчитуються данні з локального сховища
- - Відхиляти мережеві запити (cancel HTTP request)
+    Використання:
+    - Прибираються глобальні слухачі подій (removeEventListener)
+    - Прибирати асинхронні таймери та лічильники (clearTimeout, clearInterval)
+    - Відхиляти мережеві запити (cancel HTTP request)
 
- componentDidUpdate(prevProps, prevState){} - метод життєвого циклу,
- що запускається кожен раз, після того, як компонента оновилася (змінилися
-  пропси або стейт)
+ componentDidUpdate(prevProps, prevState) {} - метод життєвого цикл,
+    що запускається кожен раз, після того, як компонента оновилася(змінилися пропси, або стейт).
+   
+    Використання:
+    - Надсилаються мережеві запити (HTTP request)
+    - Оновлюють(синхронізуються) дані зі стейту з локальним сховищем
+*/
 
-  Використання:
- - Надсилаються проміжкові мережеві запити ( HTTP request)
- - Оновлюють (сінхронізують) дані зі стейту з локальним середовищем
-  */
-const Modal = ({ modalData, closeModal }) => {
+const Modal = () => {
+  // const { modalData, closeModal } = useContext(ModalContext);
+  const modalData = useSelector(state => state.modal.modalData);
+  const dispatch = useDispatch();
   const [counter, setCounter] = useState(1);
 
   useEffect(() => {
-    const handleKeyDown = e => {
-      if (e.code === 'Escape') {
-        closeModal();
+    const handleKeyDown = event => {
+      if (event.code === 'Escape') {
+        dispatch(closeModal());
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
+
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'auto';
     };
-  }, [closeModal]);
+  }, [dispatch]);
 
-  useEffect(() => {
-    console.log('Product counter value:', +counter);
-  }, [counter]);
-
-  // Про життєвий цикл компоненти
-  // state = {
-  //   counter: 1,
-  // };
-
-  // componentDidMount() {
-  //   window.addEventListener('keydown', this.handleKeyDown);
-  //   document.body.style.overflow = 'hidden';
-  // }
-
-  // componentWillUnmount() {
-  //   window.removeEventListener('keydown', this.handleKeyDown);
-  //   document.body.style.overflow = 'auto';
-  // }
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   console.log('Modal was update! Props or state change');
-  // }
-
-  const handleIncrementProduct = () => {
-    // this.setState(prevState => ({ counter: prevState.counter + 1 }));
-    setCounter(prevState => prevState + 1);
-    // setCounter(counter + 1);
-  };
-
-  const handleOverlayClick = e => {
-    if (e.currentTarget === e.target) {
-      closeModal();
+  const handleOverayClick = event => {
+    if (event.target === event.currentTarget) {
+      dispatch(closeModal());
     }
   };
 
   return (
-    <StyledModal onClick={handleOverlayClick}>
+    <StyledModal onClick={handleOverayClick}>
       <div className="modal">
-        <button onClick={closeModal} className="btnClose">
-          &times;
+        <button onClick={() => dispatch(closeModal())} className="closeBtn">
+          ❌
         </button>
-        <h2>Product details</h2>
+        <h2>Product Details</h2>
         <div>
           <h3>Title: {modalData.title}</h3>
           <p>Price: {modalData.price}$</p>
           <p>Discount: {modalData.discount}$</p>
-          <button onClick={handleIncrementProduct}>
-            Add product: {counter}
-          </button>
         </div>
+
+        <button onClick={() => setCounter(prev => prev + 1)}>
+          Product count: {counter}
+        </button>
       </div>
     </StyledModal>
   );

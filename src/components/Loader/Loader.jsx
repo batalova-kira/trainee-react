@@ -1,7 +1,7 @@
 import React from 'react';
 import { DNA } from 'react-loader-spinner';
 
-export const Loader = () => {
+const Loader = () => {
   return (
     <DNA
       visible={true}
@@ -13,3 +13,5 @@ export const Loader = () => {
     />
   );
 };
+
+export default Loader;

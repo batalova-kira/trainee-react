@@ -1,25 +1,27 @@
+// import axios from 'axios';
 import axios from 'axios';
-import { Loader } from 'components/Loader/Loader';
+import Loader from 'components/Loader/Loader';
 import React, { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
+
+// rcc - react class component
+// rafce - react arrow function expression component export default
 
 const PostsPage = () => {
-  // отриммати значення пошукового параметра
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchedPosts, setSearchedPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  //?query=123
-  const queryValue = searchParams.get('query'); //123
-  // CTRL + SHIFT + L
-  console.log('queryValue: ', queryValue);
+  const location = useLocation();
 
-  //витягнути значення пошукового параментра з форми та перезаписати його
+  // ?query=123
+  const queryValue = searchParams.get('query'); // '123'
+  // CTRL + SHIFT + L
+
   const onFormSubmit = e => {
     e.preventDefault();
     const value = e.currentTarget.elements.searchKey.value;
-
     setSearchParams({ query: value });
   };
 
@@ -32,7 +34,7 @@ const PostsPage = () => {
         const { data } = await axios.get(
           `https://jsonplaceholder.typicode.com/posts/${queryValue}`
         );
-        //Мені потрібно буде зробити setSearchedPosts(data)
+        // ВАМ ПОТРІБНО БУДЕ ПРОСТО ЗРОБИТИ setSearchedPosts(data)
         setSearchedPosts([data]);
       } catch (error) {
         setError(error.message);
@@ -40,6 +42,7 @@ const PostsPage = () => {
         setIsLoading(false);
       }
     };
+
     fetchSearchedPosts();
   }, [queryValue]);
 
@@ -47,7 +50,7 @@ const PostsPage = () => {
     <div>
       <form onSubmit={onFormSubmit}>
         <label>
-          <span>Search post by Id:</span>
+          <span>Search post by id:</span>
           <input type="text" name="searchKey" required placeholder="12" />
         </label>
         <button type="submit">Search post</button>
@@ -57,9 +60,14 @@ const PostsPage = () => {
       {searchedPosts !== null &&
         searchedPosts.map(post => {
           return (
-            <Link key={post.id} to={`/posts/${post.id}`}>
+            <Link
+              state={{ from: location }}
+              key={post.id}
+              to={`/posts/${post.id}`}
+            >
               <div>
                 <h2>{post.title}</h2>
+                <h3>PostId: {post.id}</h3>
                 <code>{post.body}</code>
               </div>
             </Link>

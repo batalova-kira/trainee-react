@@ -1,71 +1,86 @@
-import React from 'react';
 import axios from 'axios';
-import { Loader } from '../components/Loader/Loader.jsx';
-import { StyledPosts } from './PostsPages.styled.js';
+import React from 'react';
+
+import { StyledPosts } from './PostsPages.styled';
+import Loader from 'components/Loader/Loader';
 import { Link } from 'react-router-dom';
 
-export default class HomePage extends React.Component {
+export class HomePage extends React.Component {
   state = {
     posts: null,
-    selectedPostId: null,
     comments: null,
+    selectedPostId: null,
 
     isLoading: false,
     error: null,
   };
 
-  // функція (метод) для нашого мережевого запиту постів
   fetchPosts = async () => {
     try {
-      this.setState({ isLoading: true });
+      this.setState({
+        isLoading: true,
+      });
       const { data } = await axios.get(
         'https://jsonplaceholder.typicode.com/posts'
       );
-      this.setState({ posts: data });
+
+      this.setState({
+        posts: data,
+      });
     } catch (error) {
       this.setState({ error: error.message });
     } finally {
-      this.setState({ isLoading: false });
+      this.setState({
+        isLoading: false,
+      });
     }
   };
 
-  // функція (метод) для мережевого запиту коментарів до постів
-  fetchPostsComments = async () => {
+  fetchPostComments = async () => {
     try {
-      this.setState({ isLoading: true });
+      this.setState({
+        isLoading: true,
+      });
       const { data } = await axios.get(
         `https://jsonplaceholder.typicode.com/comments?postId=${this.state.selectedPostId}`
       );
-      this.setState({ comments: data });
+
+      this.setState({
+        comments: data,
+      });
     } catch (error) {
       this.setState({ error: error.message });
     } finally {
-      this.setState({ isLoading: false });
+      this.setState({
+        isLoading: false,
+      });
     }
   };
 
-  //функція, яка при натисканні на пост зберігає в стейті ід поста
-
-  onSelectPost = id => {
-    this.setState({ selectedPostId: id });
+  onSelecPostId = postId => {
+    this.setState({
+      selectedPostId: postId,
+    });
   };
-  // виклик функції (методу) для нашого мережевого запиту під час першого рендеру цього компоненту
+
   componentDidMount() {
     this.fetchPosts();
   }
 
   componentDidUpdate(_, prevState) {
     if (prevState.selectedPostId !== this.state.selectedPostId) {
-      this.fetchPostsComments();
+      this.fetchPostComments();
     }
   }
+
   render() {
     return (
       <StyledPosts>
-        <h1>HTTP Requests</h1>
+        <h1>HTTP-requests</h1>
+
         {this.state.error !== null && (
           <p className="error-bage">
-            Ooops, some error occured..Error message: {this.state.error}
+            Oops, some error occured... Error message: {this.state.error}
           </p>
         )}
         {this.state.isLoading && <Loader />}
@@ -76,14 +91,13 @@ export default class HomePage extends React.Component {
                 return (
                   <li
                     key={post.id}
+                    // onClick={() => this.onSelecPostId(post.id)}
                     className="postListItem"
-                    // onClick={() => this.onSelectPost(post.id)}
                   >
                     <Link to={`/posts/${post.id}`}>
                       <h2 className="itemTitle">{post.title}</h2>
                       <p className="itemBody">
-                        <b>Body</b>
-                        {post.body}
+                        <b>Body:</b> {post.body}
                       </p>
                     </Link>
                   </li>
@@ -91,19 +105,19 @@ export default class HomePage extends React.Component {
               })}
           </ul>
           <ul className="commentsList">
-            {/* <li className="commentsListItem">
-              Selected post Id: {this.state.selectedPostId}
-            </li> */}
-            {!this.state.isLoading &&
-              this.state.comments !== null &&
+            {this.state.selectedPostId !== null && (
+              <li className="commentsListItem">
+                Selected post id: {this.state.selectedPostId}
+              </li>
+            )}
+            {this.state.comments !== null &&
               this.state.comments.map(comment => {
                 return (
                   <li key={comment.id} className="commentsListItem">
-                    <h2 className="commentTitle">{comment.name}</h2>
-                    <h3 className="commentEmail">{comment.email}</h3>
+                    <h2 className="commentTitle">Name: {comment.name}</h2>
+                    <h3 className="commentEmail">Email: {comment.email}</h3>
                     <p className="commentBody">
-                      <b>Body </b>
-                      {comment.body}
+                      <b>Body:</b> {comment.body}
                     </p>
                   </li>
                 );
@@ -114,3 +128,5 @@ export default class HomePage extends React.Component {
     );
   }
 }
+
+export default HomePage;

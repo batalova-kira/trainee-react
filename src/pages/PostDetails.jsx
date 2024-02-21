@@ -1,11 +1,28 @@
+import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
+import {
+  Link,
+  NavLink,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from 'react-router-dom';
 import axios from 'axios';
-import { Loader } from 'components/Loader/Loader';
-import React, { useEffect, useState } from 'react';
-import { NavLink, Route, Routes, useParams } from 'react-router-dom';
-import PostComments from './PostComments';
 
+import Loader from 'components/Loader/Loader';
+
+const PostsComments = lazy(() => import('pages/PostsComments'));
+
+// import PostsComments from './PostsComments';
+
+// /posts/0deqwe
+// /posts/dwa2123dwa241
 const PostDetails = () => {
   const { postId } = useParams();
+  const location = useLocation();
+  const backLinkRef = useRef(location.state?.from ?? '/');
+  // postId -> '0deqwe';
+  // postId -> 'dwa2123dwa241';
   const [postDetails, setPostDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -24,12 +41,14 @@ const PostDetails = () => {
         setIsLoading(false);
       }
     };
+
     fetchPostDetails();
   }, [postId]);
 
   return (
     <div>
-      <h1>PostDetails</h1>
+      <h1>Post Details</h1>
+      <Link to={backLinkRef.current}>Go back</Link>
       {error !== null && <p className="error-bage">{error}</p>}
       {isLoading && <Loader />}
       {postDetails !== null && (
@@ -43,10 +62,12 @@ const PostDetails = () => {
         <NavLink className="header-link" to="comments">
           Comments
         </NavLink>
-        <Routes>
-          <Route path="comments" element={<PostComments />} />
-        </Routes>
       </div>
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path="comments" element={<PostsComments />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 };
