@@ -5,12 +5,21 @@ import { Product, ProductForm, Section } from 'components';
 import Modal from 'components/Modal/Modal';
 import css from 'components/App.module.css';
 import { addProduct, deleteProduct } from '../redux/products/products.reducer';
+import Filter from 'components/Filter/Filter';
+import {
+  selectFilteredProducts,
+  selectProducts,
+  // selectProductsFilterTerm,
+} from '../redux/products/products.selectors';
+import { selectIsOpenModal } from '../redux/modal/modal.selectors';
 
 const ProductsPage = () => {
   const dispatch = useDispatch();
 
-  const isOpenModal = useSelector(state => state.modal.isOpenModal);
-  const products = useSelector(state => state.productsStore.products);
+  const isOpenModal = useSelector(selectIsOpenModal);
+  const products = useSelector(selectProducts);
+  // const filterTerm = useSelector(selectProductsFilterTerm);
+  const filteredProducts = useSelector(selectFilteredProducts);
 
   const handleDeleteProduct = productId => {
     dispatch(deleteProduct(productId));
@@ -34,13 +43,24 @@ const ProductsPage = () => {
     dispatch(addProduct(finalProduct));
   };
 
-  const sortedProducts = [...products].sort((a, b) => b.discount - a.discount);
+  // const filteredProducts = products.filter(
+  //   ({ price, title }) =>
+  //     title.toLowerCase().includes(filterTerm.toLowerCase().trim()) ||
+  //     price.toString().includes(filterTerm.toLowerCase().trim())
+  // );
+
+  const sortedProducts = [...filteredProducts].sort(
+    (a, b) => b.discount - a.discount
+  );
+
   return (
     <div>
       <Section title="Add product Form">
         <ProductForm handleAddProduct={handleAddProduct} />
       </Section>
-
+      <Section title="Filter Product">
+        <Filter />
+      </Section>
       <Section title="Product List">
         <div className={css.productList}>
           {sortedProducts.map(product => {
