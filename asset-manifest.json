@@ -1,26 +1,26 @@
 {
   "files": {
     "main.css": "/trainee-react/static/css/main.2838a7a5.css",
-    "main.js": "/trainee-react/static/js/main.58f8d482.js",
+    "main.js": "/trainee-react/static/js/main.096f5b1b.js",
     "static/js/20.cb83ee6f.chunk.js": "/trainee-react/static/js/20.cb83ee6f.chunk.js",
-    "static/js/27.8cad841e.chunk.js": "/trainee-react/static/js/27.8cad841e.chunk.js",
+    "static/js/358.ac241151.chunk.js": "/trainee-react/static/js/358.ac241151.chunk.js",
     "static/js/953.8f7ec502.chunk.js": "/trainee-react/static/js/953.8f7ec502.chunk.js",
-    "static/css/165.8f11a36e.chunk.css": "/trainee-react/static/css/165.8f11a36e.chunk.css",
-    "static/js/165.7a612ba5.chunk.js": "/trainee-react/static/js/165.7a612ba5.chunk.js",
+    "static/css/471.57287f49.chunk.css": "/trainee-react/static/css/471.57287f49.chunk.css",
+    "static/js/471.a7677f39.chunk.js": "/trainee-react/static/js/471.a7677f39.chunk.js",
     "static/js/422.49379d74.chunk.js": "/trainee-react/static/js/422.49379d74.chunk.js",
     "index.html": "/trainee-react/index.html",
     "static/media/trashSvg.svg": "/trainee-react/static/media/trashSvg.f433f1d47a5a06d78e9b0ee7c55f68d7.svg",
     "main.2838a7a5.css.map": "/trainee-react/static/css/main.2838a7a5.css.map",
-    "main.58f8d482.js.map": "/trainee-react/static/js/main.58f8d482.js.map",
+    "main.096f5b1b.js.map": "/trainee-react/static/js/main.096f5b1b.js.map",
     "20.cb83ee6f.chunk.js.map": "/trainee-react/static/js/20.cb83ee6f.chunk.js.map",
-    "27.8cad841e.chunk.js.map": "/trainee-react/static/js/27.8cad841e.chunk.js.map",
+    "358.ac241151.chunk.js.map": "/trainee-react/static/js/358.ac241151.chunk.js.map",
     "953.8f7ec502.chunk.js.map": "/trainee-react/static/js/953.8f7ec502.chunk.js.map",
-    "165.8f11a36e.chunk.css.map": "/trainee-react/static/css/165.8f11a36e.chunk.css.map",
-    "165.7a612ba5.chunk.js.map": "/trainee-react/static/js/165.7a612ba5.chunk.js.map",
+    "471.57287f49.chunk.css.map": "/trainee-react/static/css/471.57287f49.chunk.css.map",
+    "471.a7677f39.chunk.js.map": "/trainee-react/static/js/471.a7677f39.chunk.js.map",
     "422.49379d74.chunk.js.map": "/trainee-react/static/js/422.49379d74.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2838a7a5.css",
-    "static/js/main.58f8d482.js"
+    "static/js/main.096f5b1b.js"
   ]
 }
